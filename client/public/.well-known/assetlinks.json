@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.syncrosanct.app",
+        "sha256_cert_fingerprints": ["1E:E4:C4:B0:19:82:7A:2E:3F:F1:29:6B:73:C6:8F:40:A0:FD:89:3E:A1:88:FB:74:72:B4:D8:ED:00:07:1A:FC"]
+      }
+    }]
