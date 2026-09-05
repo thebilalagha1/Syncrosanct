@@ -44,7 +44,7 @@ app.post("/api/auth/google", async (req, res) => {
     return res.status(401).json({ error: "invalid_google_token" });
   }
 
-  const user = upsertUser({
+  const user = await upsertUser({
     id: payload.sub,
     email: payload.email,
     name: payload.name,
@@ -64,8 +64,8 @@ app.post("/api/auth/logout", (req, res) => {
   res.json({ ok: true });
 });
 
-app.get("/api/auth/me", requireAuth, (req, res) => {
-  const user = getUser(req.userId);
+app.get("/api/auth/me", requireAuth, async (req, res) => {
+  const user = await getUser(req.userId);
   if (!user) return res.status(401).json({ error: "not_authenticated" });
   res.json({ user });
 });
@@ -75,16 +75,16 @@ app.get("/api/auth/me", requireAuth, (req, res) => {
 // already uses, just backed by SQLite and scoped to the logged-in user.
 // The app currently only uses two keys: "events" and "settings".
 
-app.get("/api/kv/:key", requireAuth, (req, res) => {
-  const value = getValue(req.userId, req.params.key);
+app.get("/api/kv/:key", requireAuth, async (req, res) => {
+  const value = await getValue(req.userId, req.params.key);
   if (value === null) return res.status(404).json({ error: "not_found" });
   res.json({ key: req.params.key, value });
 });
 
-app.put("/api/kv/:key", requireAuth, (req, res) => {
+app.put("/api/kv/:key", requireAuth, async (req, res) => {
   const { value } = req.body || {};
   if (typeof value !== "string") return res.status(400).json({ error: "value_must_be_string" });
-  setValue(req.userId, req.params.key, value);
+  await setValue(req.userId, req.params.key, value);
   res.json({ ok: true });
 });
 
